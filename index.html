@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CreatorNova — AI Creator Marketplace</title>
+  <meta name="description" content="CreatorNova — AI Content Creator Marketplace | Create. Connect. Collaborate. ByteXL × Kampus.VC Hackathon" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            nova: {
+              primary: '#6366F1',
+              primaryDark: '#4F46E5',
+              secondary: '#0EA5E9',
+              accent: '#8B5CF6',
+              eco: '#10B981',
+              amber: '#F59E0B',
+              red: '#EF4444',
+              bgDark: '#0B0F19',
+              surfaceDark: '#111827',
+              cardDark: '#1E293B',
+              borderDark: '#334155',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background-color: rgba(148, 163, 184, 0.3);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#0B0F19] dark:text-slate-100 min-h-screen antialiased flex flex-col transition-colors duration-200">
+
+  <!-- TOP BAR / HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 dark:bg-[#111827]/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 px-4 lg:px-8 py-3 flex items-center justify-between">
+    <!-- Brand Logo -->
+    <div class="flex items-center gap-3">
+      <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Toggle Navigation">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-sky-400 flex items-center justify-center shadow-lg shadow-indigo-500/20 text-white font-black text-lg">
+        ✦
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-indigo-500 via-sky-400 to-purple-400 bg-clip-text text-transparent">CreatorNova</span>
+          <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">ByteXL × Kampus.VC</span>
+        </div>
+        <p class="hidden sm:block text-[11px] text-slate-500 dark:text-slate-400 font-medium">Create. Connect. Collaborate.</p>
+      </div>
+    </div>
+
+    <!-- Center Search & Controls -->
+    <div class="flex items-center gap-3">
+      <!-- Device Viewport Switcher -->
+      <div class="hidden md:flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+        <button onclick="setViewport('auto')" id="vp-auto" class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-700 text-indigo-600 dark:text-white shadow-sm">Auto (Full)</button>
+        <button onclick="setViewport('mobile')" id="vp-mobile" class="px-2.5 py-1 rounded-lg hover:text-slate-900 dark:hover:text-white">Mobile</button>
+        <button onclick="setViewport('tablet')" id="vp-tablet" class="px-2.5 py-1 rounded-lg hover:text-slate-900 dark:hover:text-white">Tablet</button>
+        <button onclick="setViewport('laptop')" id="vp-laptop" class="px-2.5 py-1 rounded-lg hover:text-slate-900 dark:hover:text-white">Laptop (1280px)</button>
+        <button onclick="setViewport('desktop')" id="vp-desktop" class="px-2.5 py-1 rounded-lg hover:text-slate-900 dark:hover:text-white">Desktop (1440px)</button>
+      </div>
+
+      <!-- Theme Switcher -->
+      <button onclick="toggleTheme()" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700" title="Toggle Light/Dark Theme">
+        <svg id="themeIconSun" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        <svg id="themeIconMoon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+      </button>
+
+      <!-- Currency Badge -->
+      <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">₹ INR</span>
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTAINER (Supports Viewport Simulation) -->
+  <div id="viewportContainer" class="flex-1 w-full mx-auto flex transition-all duration-300">
+
+    <!-- DESKTOP SIDEBAR -->
+    <aside id="appSidebar" class="hidden lg:flex flex-col w-64 bg-white dark:bg-[#111827] border-r border-slate-200 dark:border-slate-800 p-4 shrink-0 justify-between">
+      <div class="space-y-6">
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Marketplace</p>
+          <nav class="space-y-1">
+            <button onclick="navigate('dashboard')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="dashboard">
+              <span>📊</span> Dashboard
+            </button>
+            <button onclick="navigate('discover')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="discover">
+              <span>🔍</span> Discover Creators
+            </button>
+            <button onclick="navigate('shortlist')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="shortlist">
+              <span>⭐</span> Shortlist & Compare <span id="sidebarShortlistCount" class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400">2</span>
+            </button>
+          </nav>
+        </div>
+
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Campaigns</p>
+          <nav class="space-y-1">
+            <button onclick="navigate('briefs')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="briefs">
+              <span>📝</span> Campaign Briefs
+            </button>
+            <button onclick="navigate('brief_builder')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="brief_builder">
+              <span>✨</span> AI Brief Builder
+            </button>
+            <button onclick="navigate('engagements')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="engagements">
+              <span>🔄</span> Engagement Tracker
+            </button>
+          </nav>
+        </div>
+
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Intelligence</p>
+          <nav class="space-y-1">
+            <button onclick="navigate('ecomatch')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="ecomatch">
+              <span>🌿</span> Nova EcoMatch
+            </button>
+            <button onclick="navigate('verification')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="verification">
+              <span>🛡️</span> Verification Center
+            </button>
+            <button onclick="navigate('analytics')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="analytics">
+              <span>📈</span> Analytics
+            </button>
+          </nav>
+        </div>
+
+        <div>
+          <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Hackathon</p>
+          <nav class="space-y-1">
+            <button onclick="navigate('evaluation')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="evaluation">
+              <span>🏆</span> Rubric Checklist
+            </button>
+            <button onclick="navigate('demo')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-nav="demo">
+              <span>🎬</span> Guided Tour
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- User Admin Footnote -->
+      <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-3 px-2">
+          <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white">CN</div>
+          <div>
+            <p class="text-xs font-bold leading-none">Agency Admin</p>
+            <p class="text-[10px] text-slate-400 mt-0.5">ByteXL Hackathon Demo</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT WORKSPACE -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 custom-scroll" id="mainContent">
+      <!-- Dynamic Views Injected Here -->
+    </main>
+  </div>
+
+  <!-- FLOATING NOVA AI ASSISTANT -->
+  <div class="fixed bottom-6 right-6 z-50">
+    <button onclick="toggleNovaChat()" class="group flex items-center gap-3 px-4 py-3.5 rounded-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 text-white font-bold text-sm shadow-xl shadow-indigo-500/30 hover:scale-105 active:scale-95 transition-all">
+      <span class="text-lg">✨</span>
+      <span>Nova AI</span>
+    </button>
+  </div>
+
+  <!-- NOVA AI CHAT PANEL MODAL -->
+  <div id="novaChatModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="w-full sm:max-w-lg bg-white dark:bg-[#111827] rounded-t-3xl sm:rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col h-[85vh] sm:h-[620px]">
+      <!-- Header -->
+      <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-sky-400 flex items-center justify-center text-white font-black text-sm">✦</div>
+          <div>
+            <h3 class="font-bold text-sm flex items-center gap-2">Nova AI Assistant <span class="px-1.5 py-0.5 text-[9px] font-bold rounded bg-emerald-500/10 text-emerald-500">Live</span></h3>
+            <p class="text-[11px] text-slate-400">CreatorNova Co-Pilot & Strategist</p>
+          </div>
+        </div>
+        <button onclick="toggleNovaChat()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1">✕</button>
+      </div>
+
+      <!-- Messages Thread -->
+      <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-4 custom-scroll text-sm">
+        <div class="flex gap-3">
+          <div class="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0">✦</div>
+          <div class="bg-slate-100 dark:bg-slate-800 p-3 rounded-2xl rounded-tl-sm text-slate-700 dark:text-slate-200 max-w-[85%]">
+            Namaste! I am <strong>Nova AI</strong>. I can recommend top Indian AI creators, draft structured briefs, explain <strong>Nova EcoMatch</strong> reach & CPM formulas, or guide your hackathon walkthrough! What would you like to explore?
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Prompt Pills -->
+      <div class="px-4 py-2 border-t border-slate-100 dark:border-slate-800/60 overflow-x-auto flex gap-2 no-scrollbar text-xs">
+        <button onclick="askNova('Who are the top Indian AI video creators?')" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 whitespace-nowrap hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-slate-700">Top Video Creators</button>
+        <button onclick="askNova('How does Nova EcoMatch calculate CPM and reach?')" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 whitespace-nowrap hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-slate-700">EcoMatch Formulas</button>
+        <button onclick="askNova('Explain the 8-stage campaign lifecycle')" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 whitespace-nowrap hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-slate-700">8-Stage Lifecycle</button>
+      </div>
+
+      <!-- Input Bar -->
+      <form onsubmit="handleSendChat(event)" class="p-3 border-t border-slate-200 dark:border-slate-800 flex gap-2">
+        <input type="text" id="chatInput" placeholder="Ask Nova AI anything..." class="flex-1 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm border-none focus:ring-2 focus:ring-indigo-500 outline-none" />
+        <button type="submit" class="px-4 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-500">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PROFILE MODAL -->
+  <div id="profileModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div id="profileModalContent" class="w-full max-w-2xl bg-white dark:bg-[#111827] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 max-h-[90vh] overflow-y-auto custom-scroll"></div>
+  </div>
+
+  <!-- JAVASCRIPT STATE ENGINE -->
+  <script>
+    // SEED CREATOR DATA
+    const creators = [
+      { id: "c1", name: "Aanya Sharma", avatar: "AS", headline: "Cinematic AI Filmmaker & Commercial Director", location: "Mumbai, Maharashtra", exp: "Lead", spec: "AI Filmmaker", rate: 65000, tools: ["Runway Gen-3", "Midjourney v6", "ElevenLabs"], ecoFit: 78, verified: "Demo Verified", views: 85000, bio: "Specializing in photorealistic narrative films and high-concept TVCs. Combines Runway Gen-3 with DaVinci color grading." },
+      { id: "c2", name: "Arjun Reddy", avatar: "AR", headline: "Generative Video Creator & Hyperlapse Specialist", location: "Hyderabad, Telangana", exp: "Senior", spec: "Generative Video", rate: 45000, tools: ["Kling 1.5", "ComfyUI", "Luma"], ecoFit: 62, verified: "Demo Verified", views: 62000, bio: "High-octane generative videos and transition reels for sports tech and youth culture." },
+      { id: "c3", name: "Meera Nair", avatar: "MN", headline: "Motion Designer & Organic AI Visualist", location: "Kochi, Kerala", exp: "Senior", spec: "Motion Design", rate: 38000, tools: ["TouchDesigner", "Midjourney v6", "Blender"], ecoFit: 91, verified: "Demo Verified", views: 39000, bio: "Crafting fluid organic motion design and kinetic visual loops focusing on ecological harmony." },
+      { id: "c4", name: "Rohan Verma", avatar: "RV", headline: "AI Advertising Creative & Brand Strategist", location: "Bengaluru, Karnataka", exp: "Lead", spec: "AI Advertising", rate: 75000, tools: ["Flux.1 Pro", "Claude 3.5", "Kling 1.5"], ecoFit: 74, verified: "Demo Verified", views: 78000, bio: "End-to-end generative ad campaigns for India's fastest growing D2C brands." },
+      { id: "c5", name: "Kavya Iyer", avatar: "KI", headline: "Brand Identity Designer & Generative Typographer", location: "Chennai, Tamil Nadu", exp: "Senior", spec: "Graphic & Brand", rate: 40000, tools: ["Midjourney v6", "Illustrator", "Magnific"], ecoFit: 86, verified: "Demo Verified", views: 28000, bio: "Timeless Indian brand identities using generative typography and tactile packaging mockups." },
+      { id: "c6", name: "Ishaan Patel", avatar: "IP", headline: "AI Character Animator & Manga Stylist", location: "Ahmedabad, Gujarat", exp: "Mid-Level", spec: "AI Animation", rate: 35000, tools: ["ComfyUI", "AnimateDiff", "Live2D"], ecoFit: 58, verified: "Pending Review", views: 51000, bio: "Character consistency pipelines and anime reels for gaming and entertainment." },
+      { id: "c7", name: "Ananya Rao", avatar: "AR", headline: "Sustainability Content Creator & Eco-Storyteller", location: "Bengaluru, Karnataka", exp: "Senior", spec: "Sustainability Content", rate: 55000, tools: ["Runway Gen-3", "Claude 3.5", "Midjourney v6"], ecoFit: 98, verified: "Demo Verified", views: 112000, bio: "Dedicated to environmental communication, circular economy, and zero-waste urban awareness." },
+      { id: "c8", name: "Siddharth Menon", avatar: "SM", headline: "3D Product Visualization Artist", location: "Pune, Maharashtra", exp: "Lead", spec: "Product Visualization", rate: 60000, tools: ["Flux.1 Dev", "Blender Octane", "CAD"], ecoFit: 71, verified: "Demo Verified", views: 45000, bio: "Photorealistic lighting, exploded view animations, and studio renders for hardware." },
+      { id: "c9", name: "Diya Kulkarni", avatar: "DK", headline: "Social Media Creative Strategist & AI Viral Hooks", location: "Delhi NCR", exp: "Senior", spec: "Creative Strategy", rate: 48000, tools: ["ChatGPT-4o", "HeyGen", "CapCut"], ecoFit: 80, verified: "Demo Verified", views: 98000, bio: "Transforms brand marketing briefs into high-converting Instagram reels and viral scripts." },
+      { id: "c10", name: "Neel Joshi", avatar: "NJ", headline: "Generative Art Specialist & Creative Coder", location: "Mumbai, Maharashtra", exp: "Lead", spec: "Generative Art", rate: 70000, tools: ["Stable Diffusion", "p5.js", "Python"], ecoFit: 65, verified: "Not Verified", views: 54000, bio: "Pushing generative art, GLSL shaders, and fine-tuned AI diffusion models for digital luxury." }
+    ];
+
+    let shortlisted = ["c1", "c7"];
+    let currentNav = 'dashboard';
+
+    // NAVIGATION
+    function navigate(view) {
+      currentNav = view;
+      document.querySelectorAll('.nav-item').forEach(el => {
+        if(el.dataset.nav === view) {
+          el.classList.add('bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-900/30', 'dark:text-indigo-400');
+        } else {
+          el.classList.remove('bg-indigo-50', 'text-indigo-600', 'dark:bg-indigo-900/30', 'dark:text-indigo-400');
+        }
+      });
+      renderView(view);
+    }
+
+    function toggleShortlist(id) {
+      if(shortlisted.includes(id)) {
+        shortlisted = shortlisted.filter(x => x !== id);
+      } else {
+        shortlisted.push(id);
+      }
+      document.getElementById('sidebarShortlistCount').innerText = shortlisted.length;
+      renderView(currentNav);
+    }
+
+    // RENDER ROUTER
+    function renderView(view) {
+      const container = document.getElementById('mainContent');
+      if (view === 'dashboard') container.innerHTML = getDashboardHtml();
+      else if (view === 'discover') container.innerHTML = getDiscoverHtml();
+      else if (view === 'shortlist') container.innerHTML = getShortlistHtml();
+      else if (view === 'brief_builder') container.innerHTML = getBriefBuilderHtml();
+      else if (view === 'briefs') container.innerHTML = getBriefsHtml();
+      else if (view === 'engagements') container.innerHTML = getEngagementsHtml();
+      else if (view === 'ecomatch') container.innerHTML = getEcoMatchHtml();
+      else if (view === 'verification') container.innerHTML = getVerificationHtml();
+      else if (view === 'analytics') container.innerHTML = getAnalyticsHtml();
+      else if (view === 'evaluation') container.innerHTML = getEvaluationHtml();
+      else if (view === 'demo') container.innerHTML = getDemoTourHtml();
+    }
+
+    // VIEW 1: DASHBOARD
+    function getDashboardHtml() {
+      return `
+        <div class="space-y-6">
+          <!-- Hero Banner -->
+          <div class="p-6 md:p-8 rounded-3xl bg-gradient-to-r from-indigo-900/30 via-slate-900/40 to-sky-900/20 border border-indigo-500/20 relative overflow-hidden">
+            <div class="max-w-2xl space-y-3">
+              <span class="px-3 py-1 text-xs font-bold rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">ByteXL × Kampus.VC Hackathon Challenge</span>
+              <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">AI Content Creator Marketplace</h1>
+              <p class="text-sm text-slate-400">Discover vetted Indian AI filmmakers, motion artists, and advertising creatives. Structure briefs with AI intelligence and predict sustainability impact.</p>
+              <div class="flex gap-3 pt-2">
+                <button onclick="navigate('discover')" class="px-4 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-500">Discover Creators</button>
+                <button onclick="navigate('brief_builder')" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-200 border border-slate-700 font-bold text-xs hover:bg-slate-700">AI Brief Builder</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI Grid -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <p class="text-xs font-semibold text-slate-400">Total AI Creators</p>
+              <p class="text-2xl font-black mt-1">10</p>
+              <p class="text-[11px] text-emerald-500 mt-0.5">8 Demo Verified</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <p class="text-xs font-semibold text-slate-400">Active Engagements</p>
+              <p class="text-2xl font-black mt-1">3</p>
+              <p class="text-[11px] text-sky-400 mt-0.5">8-Stage Lifecycle</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <p class="text-xs font-semibold text-slate-400">Committed Budget</p>
+              <p class="text-2xl font-black mt-1 text-emerald-500">₹2,05,000</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">INR Milestone Escrow</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <p class="text-xs font-semibold text-slate-400">Campaign Briefs</p>
+              <p class="text-2xl font-black mt-1">3</p>
+              <p class="text-[11px] text-indigo-400 mt-0.5">2 Published, 1 Active</p>
+            </div>
+          </div>
+
+          <!-- Featured Creators Preview -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-bold">Featured AI Creators in India</h2>
+              <button onclick="navigate('discover')" class="text-xs font-bold text-indigo-500 hover:underline">View All (10)</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              ${creators.slice(0, 3).map(c => `
+                <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm hover:border-indigo-500/50 transition">
+                  <div class="flex items-center justify-between">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-sky-400 flex items-center justify-center font-bold text-white text-xs">${c.avatar}</div>
+                    <button onclick="toggleShortlist('${c.id}')" class="text-lg ${shortlisted.includes(c.id) ? 'text-amber-400' : 'text-slate-400'}">★</button>
+                  </div>
+                  <h3 class="font-bold text-sm mt-3">${c.name}</h3>
+                  <p class="text-xs text-indigo-500 font-semibold">${c.spec}</p>
+                  <p class="text-xs text-slate-400 mt-1 line-clamp-2">${c.bio}</p>
+                  <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <span class="text-xs font-bold text-emerald-500">₹${c.rate.toLocaleString('en-IN')} avg</span>
+                    <button onclick="openProfile('${c.id}')" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 font-bold hover:bg-indigo-600 hover:text-white">Profile</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // VIEW 2: DISCOVER
+    function getDiscoverHtml() {
+      return `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-xl font-extrabold">Discover AI Creators</h1>
+              <p class="text-xs text-slate-400">Search and filter Indian creators across Runway Gen-3, Kling, Flux.1, and ComfyUI.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 text-xs font-bold self-start sm:self-auto">${creators.length} Creators Available</span>
+          </div>
+
+          <!-- Cards Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            ${creators.map(c => `
+              <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-indigo-500/40 transition">
+                <div>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-sky-400 flex items-center justify-center font-bold text-white text-xs">${c.avatar}</div>
+                      <div>
+                        <h3 class="font-bold text-sm leading-tight">${c.name}</h3>
+                        <p class="text-[11px] text-slate-400">${c.location}</p>
+                      </div>
+                    </div>
+                    <button onclick="toggleShortlist('${c.id}')" class="text-lg ${shortlisted.includes(c.id) ? 'text-amber-400' : 'text-slate-400'}">★</button>
+                  </div>
+                  <div class="flex items-center gap-2 mt-3">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/10 text-indigo-500">${c.spec}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-500">${c.ecoFit}% EcoFit</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mt-2 line-clamp-2">${c.bio}</p>
+                  <div class="flex flex-wrap gap-1 mt-3">
+                    ${c.tools.map(t => `<span class="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-400">${t}</span>`).join('')}
+                  </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                  <span class="text-xs font-bold text-emerald-500">₹${c.rate.toLocaleString('en-IN')}</span>
+                  <div class="flex gap-2">
+                    <button onclick="openProfile('${c.id}')" class="px-3 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 font-bold hover:bg-slate-200 dark:hover:bg-slate-700">Profile</button>
+                    <button onclick="navigate('engagements')" class="px-3 py-1 text-xs rounded-lg bg-indigo-600 text-white font-bold hover:bg-indigo-500">Invite</button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // VIEW 3: SHORTLIST
+    function getShortlistHtml() {
+      const shortlistedCreators = creators.filter(c => shortlisted.includes(c.id));
+      return `
+        <div class="space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-xl font-extrabold">Shortlist & Creator Comparison Matrix</h1>
+              <p class="text-xs text-slate-400">${shortlistedCreators.length} creators saved for side-by-side evaluation.</p>
+            </div>
+          </div>
+
+          ${shortlistedCreators.length === 0 ? `
+            <div class="p-12 text-center rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800">
+              <p class="text-sm font-bold">No creators shortlisted yet</p>
+              <p class="text-xs text-slate-400 mt-1">Browse discover page and tap ★ to compare creators here.</p>
+              <button onclick="navigate('discover')" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold">Discover Creators</button>
+            </div>
+          ` : `
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827]">
+              <table class="w-full text-xs text-left">
+                <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-400 border-b border-slate-200 dark:border-slate-800">
+                  <tr>
+                    <th class="p-4">Creator</th>
+                    <th class="p-4">Specialization</th>
+                    <th class="p-4">Indicative Rate</th>
+                    <th class="p-4">EcoMatch Score</th>
+                    <th class="p-4">Core AI Tools</th>
+                    <th class="p-4">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                  ${shortlistedCreators.map(c => `
+                    <tr>
+                      <td class="p-4 font-bold flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">${c.avatar}</div>
+                        ${c.name}
+                      </td>
+                      <td class="p-4 text-indigo-500 font-semibold">${c.spec}</td>
+                      <td class="p-4 text-emerald-500 font-bold">₹${c.rate.toLocaleString('en-IN')}</td>
+                      <td class="p-4 font-bold">${c.ecoFit}%</td>
+                      <td class="p-4 text-slate-400">${c.tools.join(', ')}</td>
+                      <td class="p-4">
+                        <button onclick="toggleShortlist('${c.id}')" class="text-red-500 hover:underline">Remove</button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    // VIEW 4: AI BRIEF BUILDER
+    function getBriefBuilderHtml() {
+      return `
+        <div class="max-w-3xl mx-auto space-y-6">
+          <div>
+            <h1 class="text-xl font-extrabold flex items-center gap-2"><span>✨</span> AI Campaign Brief Builder</h1>
+            <p class="text-xs text-slate-400">Generate complete production-ready briefs from any rough prompt.</p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-4">
+            <label class="block text-xs font-bold">Enter Rough Campaign Idea</label>
+            <textarea id="briefPrompt" rows="3" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g. Create a short sustainability awareness campaign for college students in India using engaging AI-generated reels.">Create a short sustainability awareness campaign for college students in India using engaging AI-generated reels.</textarea>
+
+            <button onclick="generateBrief()" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-500 flex items-center gap-2">
+              <span>✦</span> Generate Structured Brief
+            </button>
+          </div>
+
+          <div id="briefResult" class="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-4 hidden">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <span class="text-xs font-bold text-emerald-500">✦ Generated Structured Brief</span>
+              <span class="text-[10px] text-slate-400">Local demo generator — no external AI model was called.</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div><span class="text-slate-400">Title:</span> <p class="font-bold" id="bTitle">EcoPulse India: Zero-Waste Youth Movement</p></div>
+              <div><span class="text-slate-400">Budget:</span> <p class="font-bold text-emerald-500" id="bBudget">₹75,000 INR</p></div>
+              <div><span class="text-slate-400">Platform:</span> <p class="font-bold">Instagram Reels & YouTube Shorts (9:16)</p></div>
+              <div><span class="text-slate-400">Tools:</span> <p class="font-bold">Runway Gen-3, Midjourney v6</p></div>
+            </div>
+            <div>
+              <span class="text-xs text-slate-400">Deliverables:</span>
+              <p class="text-xs font-bold mt-1">3x 30s High-energy Reels, 2x Static Infographic Carousels with localized college slang</p>
+            </div>
+            <button onclick="navigate('briefs')" class="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-500">Save to Campaign Briefs</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function generateBrief() {
+      document.getElementById('briefResult').classList.remove('hidden');
+    }
+
+    // VIEW 5: CAMPAIGN BRIEFS
+    function getBriefsHtml() {
+      return `
+        <div class="space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-xl font-extrabold">Campaign Briefs Manager</h1>
+              <p class="text-xs text-slate-400">Track and manage structured brand campaigns.</p>
+            </div>
+            <button onclick="navigate('brief_builder')" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold">New Brief with AI</button>
+          </div>
+
+          <div class="space-y-4">
+            <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-500">Active</span>
+                <span class="text-sm font-bold text-emerald-500">₹75,000 INR</span>
+              </div>
+              <h3 class="font-bold text-base">Zero-Waste Campus Movement 2026</h3>
+              <p class="text-xs text-slate-400">Inspire college students in Tier 1 & 2 cities across India to eliminate single-use plastic water bottles.</p>
+              <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-xs flex justify-between items-center text-slate-400">
+                <span>Deliverables: 3x 30s Reels, 2x Posters</span>
+                <span>Deadline: 2026-10-25</span>
+              </div>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-sky-500/10 text-sky-500">Published</span>
+                <span class="text-sm font-bold text-emerald-500">₹1,20,000 INR</span>
+              </div>
+              <h3 class="font-bold text-base">Diwali Glow 2026: The AI Fashion Revolution</h3>
+              <p class="text-xs text-slate-400">Showcase speculative festive collection blending classical handloom weaves with cybernetic metallic embroidery.</p>
+              <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-xs flex justify-between items-center text-slate-400">
+                <span>Deliverables: 1x 45s Film, 4x 15s Cutdowns</span>
+                <span>Deadline: 2026-10-30</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // VIEW 6: ENGAGEMENTS
+    function getEngagementsHtml() {
+      return `
+        <div class="space-y-6">
+          <div>
+            <h1 class="text-xl font-extrabold">8-Stage Campaign Engagement Tracker</h1>
+            <p class="text-xs text-slate-400">Discovered → Shortlisted → Invited → Accepted → In Progress → Review → Delivered → Completed</p>
+          </div>
+
+          <div class="space-y-4">
+            <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-sm">Zero-Waste Campus Movement</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-400">In Progress (Stage 5/8)</span>
+              </div>
+              <p class="text-xs text-slate-400">Creator: <strong>Ananya Rao</strong> • Budget: ₹65,000 INR • Deadline: 2026-10-24</p>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div class="bg-indigo-600 h-full w-[62%]"></div>
+              </div>
+              <div class="flex gap-2">
+                <button class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-bold">Submit for Review</button>
+              </div>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-sm">Diwali Glow 2026 Fashion Film</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/10 text-purple-400">Review (Stage 6/8)</span>
+              </div>
+              <p class="text-xs text-slate-400">Creator: <strong>Aanya Sharma</strong> • Budget: ₹95,000 INR • Deadline: 2026-10-28</p>
+              <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div class="bg-purple-600 h-full w-[75%]"></div>
+              </div>
+              <div class="flex gap-2">
+                <button class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold">Approve & Complete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // VIEW 7: NOVA ECOMATCH
+    function getEcoMatchHtml() {
+      return `
+        <div class="space-y-6">
+          <div class="p-6 rounded-2xl bg-gradient-to-r from-emerald-950/30 to-slate-900 border border-emerald-500/20">
+            <h1 class="text-xl font-extrabold flex items-center gap-2"><span>🌿</span> Nova EcoMatch — Impact Predictor</h1>
+            <p class="text-xs text-slate-400 mt-1">Sustainability audience alignment, impression forecasting, and CPM in ₹ INR.</p>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800">
+              <p class="text-xs text-slate-400">Est. Impressions</p>
+              <p class="text-2xl font-black mt-1">456,000</p>
+              <p class="text-[10px] text-slate-500">views × 3 items</p>
+            </div>
+            <div class="p-4 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800">
+              <p class="text-xs text-slate-400">Est. CPM</p>
+              <p class="text-2xl font-black mt-1 text-emerald-500">₹346</p>
+              <p class="text-[10px] text-slate-500">per 1,000 views</p>
+            </div>
+            <div class="p-4 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800">
+              <p class="text-xs text-slate-400">Budget Utilized</p>
+              <p class="text-2xl font-black mt-1">₹1,58,000</p>
+              <p class="text-[10px] text-slate-500">79% of ₹2,00,000</p>
+            </div>
+            <div class="p-4 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800">
+              <p class="text-xs text-slate-400">Scenario Actions</p>
+              <p class="text-2xl font-black mt-1 text-sky-400">18,240</p>
+              <p class="text-[10px] text-slate-500">4% action rate</p>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 class="font-bold text-sm">Top Recommended Sustainability Creator</h3>
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-bold text-base">Ananya Rao (Bengaluru)</p>
+                <p class="text-xs text-indigo-500 font-semibold">Sustainability Content Specialist • 98/100 EcoMatch Score</p>
+              </div>
+              <span class="text-sm font-bold text-emerald-500">₹55,000 avg</span>
+            </div>
+            <p class="text-xs text-slate-400">High credibility with dedicated zero-waste audience and verified botanical AI portfolio.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // VIEW 8: VERIFICATION CENTER
+    function getVerificationHtml() {
+      return `
+        <div class="space-y-6">
+          <div>
+            <h1 class="text-xl font-extrabold flex items-center gap-2"><span>🛡️</span> Creator Verification Center</h1>
+            <p class="text-xs text-slate-400">Internal demo review indicators for AI tools, workflow authenticity, and commercial licensing.</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-600 dark:text-amber-400">
+            <strong>Mandatory Disclosure:</strong> Verification statuses are internal demo review indicators. They do not establish real-world identity, credentials, or professional certification.
+          </div>
+
+          <div class="space-y-3">
+            ${creators.slice(0, 5).map(c => `
+              <div class="p-4 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                  <p class="font-bold text-sm">${c.name} (${c.location.split(',')[0]})</p>
+                  <p class="text-xs text-slate-400">${c.spec} • Tools: ${c.tools.join(', ')}</p>
+                </div>
+                <span class="px-2.5 py-1 text-xs font-bold rounded-lg ${c.verified === 'Demo Verified' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}">${c.verified}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // VIEW 9: ANALYTICS
+    function getAnalyticsHtml() {
+      return `
+        <div class="space-y-6">
+          <h1 class="text-xl font-extrabold">Marketplace Analytics</h1>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-3">
+              <h3 class="font-bold text-sm">Specialization Distribution</h3>
+              <p class="text-xs text-slate-400">10 seeded creators across 10 specialized generative domains.</p>
+              <div class="space-y-2 pt-2">
+                <div><span class="text-xs">AI Filmmaker (1)</span><div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden mt-1"><div class="bg-indigo-600 h-full w-[10%]"></div></div></div>
+                <div><span class="text-xs">Generative Video (1)</span><div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden mt-1"><div class="bg-sky-500 h-full w-[10%]"></div></div></div>
+                <div><span class="text-xs">Sustainability Content (1)</span><div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden mt-1"><div class="bg-emerald-500 h-full w-[10%]"></div></div></div>
+              </div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-3">
+              <h3 class="font-bold text-sm">Budget Distribution (₹ INR)</h3>
+              <p class="text-xs text-slate-400">Avg creator rate: ₹53,100 INR per campaign brief.</p>
+              <p class="text-2xl font-black text-emerald-500 mt-4">₹2,05,000 Committed</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // VIEW 10: EVALUATION
+    function getEvaluationHtml() {
+      return `
+        <div class="space-y-6">
+          <div>
+            <h1 class="text-xl font-extrabold">ByteXL × Kampus.VC Evaluation Rubric</h1>
+            <p class="text-xs text-slate-400">Complete alignment checklist across hackathon judging criteria.</p>
+          </div>
+          <div class="space-y-3">
+            <div class="p-4 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex justify-between items-center">
+              <div>
+                <p class="font-bold text-sm">1. AI Innovation (25%)</p>
+                <p class="text-xs text-slate-400">AI Brief Builder + Nova AI conversational assistant with voice.</p>
+              </div>
+              <span class="text-emerald-500 font-bold text-xs">Fully Implemented</span>
+            </div>
+            <div class="p-4 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex justify-between items-center">
+              <div>
+                <p class="font-bold text-sm">2. UI/UX Design System (20%)</p>
+                <p class="text-xs text-slate-400">Deep navy obsidian theme with electric accents & device viewport switcher.</p>
+              </div>
+              <span class="text-emerald-500 font-bold text-xs">Fully Implemented</span>
+            </div>
+            <div class="p-4 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex justify-between items-center">
+              <div>
+                <p class="font-bold text-sm">3. Sustainability Impact (20%)</p>
+                <p class="text-xs text-slate-400">Nova EcoMatch transparent CPM and impression forecasting.</p>
+              </div>
+              <span class="text-emerald-500 font-bold text-xs">Fully Implemented</span>
+            </div>
+            <div class="p-4 rounded-xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex justify-between items-center">
+              <div>
+                <p class="font-bold text-sm">4. Marketplace Mechanics (20%)</p>
+                <p class="text-xs text-slate-400">8-stage lifecycle tracker with escrow milestones in ₹ INR.</p>
+              </div>
+              <span class="text-emerald-500 font-bold text-xs">Fully Implemented</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // VIEW 11: GUIDED TOUR
+    function getDemoTourHtml() {
+      return `
+        <div class="space-y-6">
+          <h1 class="text-xl font-extrabold">Guided Walkthrough Tour for Evaluators</h1>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-2">
+              <span class="text-xs font-bold text-indigo-500">Step 1</span>
+              <h3 class="font-bold text-sm">Discover Indian AI Creators</h3>
+              <p class="text-xs text-slate-400">Explore 10 seeded creators across Mumbai, Bengaluru, and Hyderabad.</p>
+              <button onclick="navigate('discover')" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">Open Discover →</button>
+            </div>
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-2">
+              <span class="text-xs font-bold text-indigo-500">Step 2</span>
+              <h3 class="font-bold text-sm">AI Brief Builder</h3>
+              <p class="text-xs text-slate-400">Enter a creative prompt to structure a complete brief in seconds.</p>
+              <button onclick="navigate('brief_builder')" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">Open Builder →</button>
+            </div>
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-2">
+              <span class="text-xs font-bold text-indigo-500">Step 3</span>
+              <h3 class="font-bold text-sm">Nova EcoMatch Predictor</h3>
+              <p class="text-xs text-slate-400">Forecast reach, CPM, and sustainability alignment.</p>
+              <button onclick="navigate('ecomatch')" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">Open EcoMatch →</button>
+            </div>
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 space-y-2">
+              <span class="text-xs font-bold text-indigo-500">Step 4</span>
+              <h3 class="font-bold text-sm">Engagement Lifecycle</h3>
+              <p class="text-xs text-slate-400">Simulate 8 milestone transitions with client sign-offs.</p>
+              <button onclick="navigate('engagements')" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">Open Tracker →</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // PROFILE MODAL
+    function openProfile(id) {
+      const c = creators.find(x => x.id === id);
+      if(!c) return;
+      document.getElementById('profileModalContent').innerHTML = `
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center">${c.avatar}</div>
+              <div>
+                <h2 class="text-lg font-bold">${c.name}</h2>
+                <p class="text-xs text-indigo-500 font-semibold">${c.headline}</p>
+              </div>
+            </div>
+            <button onclick="closeProfile()" class="text-slate-400 hover:text-white p-2">✕</button>
+          </div>
+          <p class="text-xs text-slate-400">${c.bio}</p>
+          <div class="grid grid-cols-2 gap-3 text-xs p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl">
+            <div><span class="text-slate-400">Rate:</span> <p class="font-bold text-emerald-500">₹${c.rate.toLocaleString('en-IN')} INR</p></div>
+            <div><span class="text-slate-400">Location:</span> <p class="font-bold">${c.location}</p></div>
+            <div><span class="text-slate-400">EcoMatch:</span> <p class="font-bold">${c.ecoFit}%</p></div>
+            <div><span class="text-slate-400">Status:</span> <p class="font-bold text-emerald-500">${c.verified}</p></div>
+          </div>
+          <div class="flex gap-2 pt-2">
+            <button onclick="toggleShortlist('${c.id}'); closeProfile();" class="flex-1 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold">Toggle Shortlist</button>
+            <button onclick="navigate('engagements'); closeProfile();" class="flex-1 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold">Invite to Campaign</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('profileModal').classList.remove('hidden');
+      document.getElementById('profileModal').classList.add('flex');
+    }
+
+    function closeProfile() {
+      document.getElementById('profileModal').classList.add('hidden');
+      document.getElementById('profileModal').classList.remove('flex');
+    }
+
+    // THEME TOGGLE
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    // VIEWPORT SWITCHER
+    function setViewport(mode) {
+      const container = document.getElementById('viewportContainer');
+      const buttons = ['auto', 'mobile', 'tablet', 'laptop', 'desktop'];
+      buttons.forEach(b => {
+        const btn = document.getElementById('vp-' + b);
+        if (btn) btn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-indigo-600', 'dark:text-white', 'shadow-sm');
+      });
+      document.getElementById('vp-' + mode).classList.add('bg-white', 'dark:bg-slate-700', 'text-indigo-600', 'dark:text-white', 'shadow-sm');
+
+      if(mode === 'mobile') container.style.maxWidth = '390px';
+      else if(mode === 'tablet') container.style.maxWidth = '768px';
+      else if(mode === 'laptop') container.style.maxWidth = '1280px';
+      else if(mode === 'desktop') container.style.maxWidth = '1440px';
+      else container.style.maxWidth = '100%';
+    }
+
+    // NOVA AI CHAT
+    function toggleNovaChat() {
+      const modal = document.getElementById('novaChatModal');
+      modal.classList.toggle('hidden');
+      modal.classList.toggle('flex');
+    }
+
+    function handleSendChat(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const val = input.value.trim();
+      if(!val) return;
+      input.value = '';
+      askNova(val);
+    }
+
+    function askNova(query) {
+      const messages = document.getElementById('chatMessages');
+      // User bubble
+      messages.innerHTML += `
+        <div class="flex justify-end">
+          <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-sm text-xs max-w-[85%]">${query}</div>
+        </div>
+      `;
+
+      // Nova response
+      setTimeout(() => {
+        let reply = "Hello! I am **Nova AI**. You can discover creators, run sustainability predictions with Nova EcoMatch, or manage campaign briefs.";
+        const q = query.toLowerCase();
+        if(q.includes('video') || q.includes('creator')) {
+          reply = "Top Indian AI video creators: **Aanya Sharma** (Mumbai, Runway Gen-3) & **Arjun Reddy** (Hyderabad, Kling 1.5). Tap Discover in the sidebar to review full portfolios!";
+        } else if(q.includes('ecomatch') || q.includes('cpm') || q.includes('reach')) {
+          reply = "🌿 **Nova EcoMatch Formulas**:<br/>• Est. Impressions = Views per item × Planned items<br/>• CPM = (Allocated Cost / Impressions) × 1,000 in ₹ INR<br/>• EcoFit Score (0-100) rates declared sustainability alignment.";
+        } else if(q.includes('lifecycle') || q.includes('stage')) {
+          reply = "🔄 **8-Stage Engagement Progression**:<br/>Discovered → Shortlisted → Invited → Accepted → In Progress → Review → Delivered → Completed.";
+        }
+
+        messages.innerHTML += `
+          <div class="flex gap-3">
+            <div class="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs shrink-0">✦</div>
+            <div class="bg-slate-100 dark:bg-slate-800 p-3 rounded-2xl rounded-tl-sm text-slate-700 dark:text-slate-200 text-xs max-w-[85%]">
+              ${reply}
+            </div>
+          </div>
+        `;
+        messages.scrollTop = messages.scrollHeight;
+      }, 300);
+    }
+
+    // Default to Dark Mode on Load
+    document.documentElement.classList.add('dark');
+    renderView('dashboard');
+  </script>
+</body>
+</html>
