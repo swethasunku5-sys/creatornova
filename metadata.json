@@ -1,0 +1,6 @@
+{
+  "name": "CreatorNova",
+  "description": "AI Content Creator Marketplace | Create. Connect. Collaborate. ByteXL x Kampus.VC Hackathon platform for discovering AI creators, generating campaign briefs, tracking engagements, and estimating sustainability impact.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
